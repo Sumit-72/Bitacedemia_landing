@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import AmbientCanvas from './components/AmbientCanvas';
 import Header from './components/Header';
 import NetworkCard from './components/NetworkCard';
@@ -17,7 +18,7 @@ export default function App() {
   const outsideUrl = import.meta.env.VITE_OUTSIDE_NETWORK_URL || 'http://139.167.188.221:3000/';
 
   useEffect(() => {
-    // Initialize GA4
+    // Initialize GA4 if available
     initGA();
 
     // Auto network check
@@ -99,6 +100,9 @@ export default function App() {
       <Footer />
 
       <Toast toasts={toasts} />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 }

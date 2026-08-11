@@ -1,32 +1,45 @@
-// Google Analytics GA4 Utility using Vite Environment Variables
+import { track } from '@vercel/analytics';
 
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
 
 export function initGA() {
   if (typeof window === 'undefined' || window.gtagInitialized) return;
 
-  // Dynamically load Google Analytics script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script);
+  // Dynamically load Google Analytics script if a valid ID is provided
+  if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
 
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    window.dataLayer.push(arguments);
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      window.dataLayer.push(arguments);
+    }
+    window.gtag = gtag;
+
+    gtag('js', new Date());
+    gtag('config', GA_MEASUREMENT_ID, {
+      send_page_view: true,
+      anonymize_ip: true,
+    });
   }
-  window.gtag = gtag;
-
-  gtag('js', new Date());
-  gtag('config', GA_MEASUREMENT_ID, {
-    send_page_view: true,
-    anonymize_ip: true,
-  });
 
   window.gtagInitialized = true;
 }
 
 export function trackNetworkClick(networkType, targetUrl) {
+  // Vercel Analytics Event Tracking
+  try {
+    track(`click_${networkType}_network`, {
+      network: networkType,
+      url: targetUrl,
+    });
+  } catch (err) {
+    console.debug('Vercel Analytics track error:', err);
+  }
+
+  // Google Analytics GA4 Event Tracking
   if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
     window.gtag('event', `click_${networkType}_network`, {
       event_category: 'outbound_network_link',
