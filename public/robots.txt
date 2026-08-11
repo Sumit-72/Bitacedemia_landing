@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: http://139.167.188.221:3000
+Host: https://bitacedemia-access-portal.vercel.app
 
 # Sitemap link for search engine crawlers
-Sitemap: http://139.167.188.221:3000/sitemap.xml
+Sitemap: https://bitacedemia-access-portal.vercel.app/sitemap.xml
