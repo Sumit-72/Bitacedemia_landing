@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Host
+Host: http://139.167.188.221:3000
+
+# Sitemap link for search engine crawlers
+Sitemap: http://139.167.188.221:3000/sitemap.xml
